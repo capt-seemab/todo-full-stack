@@ -1,10 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
-
+import './App.css'
+import Routing from './Routes/Index';
 function App() {
   return (
     <div className="App">
-    Hello
+      
+        <Routing/>
     </div>
   );
 }

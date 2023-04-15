@@ -1,0 +1,29 @@
+.List{
+    display: flex;
+    flex-wrap: wrap;
+
+}
+.TodosLists{
+    min-width: 50px;
+    width: fit-content;
+    min-height: 50px;
+    height: fit-content;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 5px;
+  margin: 15px;
+
+    box-shadow: 1.5px 1.5px 3px #0e0e0e, -1.5px -1.5px 3px rgb(95 94 94 / 25%), inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+
+
+}
+.titleLists{
+    font-size: 23px;
+    color: #5f5e5e;
+    font-weight: 600;
+    border-bottom:1px solid black ;
+}
+.contentLists{
+    color: #797878;
+    padding-top: 10px;
+}

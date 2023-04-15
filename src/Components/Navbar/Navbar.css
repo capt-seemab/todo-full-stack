@@ -1,0 +1,26 @@
+.navbar{
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    box-shadow: 1.5px 1.5px 3px #0e0e0e, -1.5px -1.5px 3px rgb(95 94 94 / 25%), inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e!important;
+
+}
+.userLog{
+    display: flex;
+    align-items: center;
+    margin: 1em;
+}
+.logo{
+    margin: 1em;
+    color: #43792a;
+}
+.username{
+    font-style: italic;
+    color: #969595;
+    margin-left: 10px;
+}
+.signOut{
+    color: #B23B3B;
+}
