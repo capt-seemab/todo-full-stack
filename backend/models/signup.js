@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const {Schema}= require('mongoose')
+const {Schema}=   mongoose
 const userSignup=new Schema({
     email:{
         type:String,
@@ -10,10 +10,16 @@ const userSignup=new Schema({
         type:String,
         required:true
     },
+    isAdmin:{
+        type:Boolean,
+        required:true
+    },
     date:{
         type:Date,
         default:Date.now
     }
 })
 
-module.exports=mongoose.model('signup',userSignup)
+const User=mongoose.model('Signup',userSignup)
+User.createIndexes();
+module.exports=User
