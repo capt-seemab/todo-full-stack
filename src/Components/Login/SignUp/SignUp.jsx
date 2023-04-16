@@ -25,12 +25,10 @@ function SignUp() {
     })
       .then((response) => response.json())
       .then((result) =>{
-        console.log("first result",result);
         if (result && result.errors && result.errors[0] && result.errors[0].msg) {
           alert(result.errors[0].msg)
         }
         else{
-          console.log("second else result",result);
           if (result && result.errors) {
             alert(result.errors)
           }else{
