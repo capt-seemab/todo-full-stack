@@ -30,7 +30,7 @@
     align-items: center;
     gap: 30px;
     padding: 1.5em 3em;
-    width: 50%;
+    width: 40%;
     background: #212121;
     
   }
@@ -115,6 +115,7 @@
   .bottom_text {
     font-size: 0.65em;
     color: #b0b0b0;
+    display: flex;
   }
   
   .bottom_text .swtich {

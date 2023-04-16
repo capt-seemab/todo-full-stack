@@ -27,3 +27,6 @@
     color: #797878;
     padding-top: 10px;
 }
+.MuiButtonBase-root{
+    width: 100%;
+}
