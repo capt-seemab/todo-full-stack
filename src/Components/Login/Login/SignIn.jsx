@@ -1,33 +1,111 @@
-import './Login.css'
-import {Link } from 'react-router-dom'
+import { body } from "express-validator";
+import "./Login.css";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
+function SignIn({session}) {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-function SignIn() {
+    fetch("http://localhost:3001/api/login", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) =>{
+        console.log("first result",result);
+        if (result && result.errors && result.errors[0] && result.errors[0].msg) {
+          alert(result.errors[0].msg)
+        }
+        else{
+          console.log("second else result",result);
+          if (result && result.errors) {
+            alert(result.errors)
+          }else{
+            console.log("before if ",result);
+            if(result?.isActive){
+              console.log("result",result);
+               if(result.isAdmin){
+                navigate(
+                  '/Admin',{
+                    state:{
+                      email:result.email,
+                      id:result.id
+                    }
+                  }
+                )
+               }else{
+                navigate(
+                  '/Todo',{
+                    state:{
+                      email:result.email,
+                      id:result.id
+                    }
+                  }
+                )
+               }
+            }else{
+              alert("session expired please login again")
+            }
+          }
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  const submitSignUpData =()=>{
-    console.log("data value");
-  }
   return (
-    <div class="container">
-  <input id="register_toggle" type="checkbox"/>
-  <div class="slider">
-    <form class="form">
-      <span class="title">Login</span>
-      <div class="form_control">
-      <label class="label">Email</label>
-        <input required="" placeholder='Email' class="input" type="text"/>
-      </div>
-      <div class="form_control">
-      <label class="label">Password</label>
-        <input required="" class="input" type="password"/>
-      </div>
+      !session && <div className="container">
+      <input id="register_toggle" type="checkbox" />
+      <div className="slider">
+        <form className="form" onSubmit={handleSubmit}>
+          <span className="title">Login</span>
+          <div className="form_control">
+            <label className="label">Email</label>
+            <input
+              required=""
+              placeholder="Email"
+              id="username"
+              className="input"
+              type="text"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="form_control">
+            <label className="label">Password</label>
+            <input
+              required=""
+              id="password"
+              className="input"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-      <button>Login</button>
+          <button>Login</button>
 
-      <span class="bottom_text">Don't have an account? <label class="swtich" for="register_toggle"> <a class="swtich"  href="/signUp">Sign Up</a> </label> </span>
-    </form>
+          <span className="bottom_text">
+            Don't have an account?{" "}
+            <label className="swtich" htmlFor="register_toggle">
+              {" "}
+              <a className="swtich" href="/signUp">
+                Sign Up
+              </a>{" "}
+            </label>{" "}
+          </span>
+        </form>
+      </div>
     </div>
-</div>
+    
+   
   );
 }
 

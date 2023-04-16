@@ -14,6 +14,10 @@ const userSignup=new Schema({
         type:Boolean,
         required:true
     },
+    isActive:{
+        type:Boolean,
+        required:false
+    },
     date:{
         type:Date,
         default:Date.now

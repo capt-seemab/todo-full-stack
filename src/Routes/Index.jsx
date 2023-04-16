@@ -8,12 +8,12 @@ import SignIn from "../Components/Login/Login/SignIn";
 const Routing = () => {
 return (
 <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/" element={<SignIn session={false}/>} />
+        {/* <Route exact path="/signIn" element={<SignIn session={true}/>} /> */}
+        <Route exact path="/signUp" element={<SignUp />} />
 
-
-        <Route path="/Admin" element={<Admin />} />
-        <Route path="/Todo" element={<UserTodoPanel />} />
+        <Route exact path="/Admin" element={<Admin />} />
+        <Route exact path="/Todo" element={<UserTodoPanel />} />
       
 </Routes>
 );

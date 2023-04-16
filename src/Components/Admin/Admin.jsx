@@ -1,11 +1,13 @@
 import * as React from 'react';
+import { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import './Admin.css'
-import Navbar from '../Navbar/Navbar';
+import  '../Navbar/Navbar.css';
+import { useLocation,useNavigate } from 'react-router-dom';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -40,16 +42,62 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs() {
-  const [value, setValue] = React.useState(0);
 
+
+
+export default function VerticalTabs() {
+  const [value, setValue] = useState(0);
+  const [allUser,setAllUser]=useState([])
+  const {state}=useLocation()
+  const navigate=useNavigate()
   const handleChange = (event, newValue) => {
+    console.log("value",newValue);
     setValue(newValue);
   };
+  const logOut=()=>{
+    fetch("http://localhost:3001/api/logout", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: state.email,
+    }),
+  }).then(response=>response.json()).then(result=>
+    {
+      if (!result.isActive) {
+        navigate('/')
+      }
+    })
+  }
 
+//get all userData
+useEffect(()=>{
+  fetch("http://localhost:3001/api/signup/getAllUser", {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if(result?.errors){
+        alert(result.errors)
+      }else{
+        setAllUser(result);
+      }
+    });
+},[])
+console.log("alluser",allUser)
   return (
     <>
-    <Navbar name='Admin'/>
+    <div className='navbar'>
+    <div className='username'>{state.email}</div>
+    <div className='userLog'>
+        <div className='logo'>Admin</div> 
+        <div className='signOut' onClick={logOut} style={{cursor:"pointer"}}>SignOut</div>
+    </div>
+  </div>
     <Box
       sx={{ flexGrow: 1,backgroundColor:'#212121', display: 'flex'}}
     >
@@ -61,58 +109,26 @@ export default function VerticalTabs() {
         aria-label="Vertical tabs example"
         sx={{  width:'250px' ,height:'100vh',boxShadow:'1.5px 1.5px 3px #0e0e0e, -1.5px -1.5px 3px rgb(95 94 94 / 25%), inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e'}}
       >
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        {
+          allUser?.map((user,index)=>{
+            return<Tab label={`${user.email}`} {...a11yProps(index)} />
+          })
+        }
         
       </Tabs>
-      <TabPanel value={value} index={0}>
-        <div className="List">
-            <div class="TodosLists">
-                <div className="titleLists">Date</div>
-                <div className="contentLists">Contenty Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, sit.</div>
-            </div>
-            <div class="TodosLists">
-                <div className="titleLists">Date</div>
-                <div className="contentLists">Contenty Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem est veniam nesciunt dolorum labore illum ipsa! Veritatis distinctio optio dolorem?</div>
-            </div>
-            <div class="TodosLists">
-                <div className="titleLists">Date</div>
-                <div className="contentLists">Contenty Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, nostrum?</div>
-            </div>
-            <div class="TodosLists">
-                <div className="titleLists">Date</div>
-                <div className="contentLists">Contenty Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem est veniam nesciunt dolorum labore illum ipsa! Veritatis distinctio optio dolorem?</div>
-            </div>
-            <div class="TodosLists">
-                <div className="titleLists">Date</div>
-                <div className="contentLists">Contenty Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, nostrum?</div>
-            </div>
-        </div>
-
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+        {allUser?.map((user,index)=>{
+           return <TabPanel value={value} index={index}>
+           <div className="List">
+               <div class="TodosLists">
+                   <div className="titleLists">Date <button style={{marginLeft:"25rem",marginBottom:'1rem'}}>Delete</button></div>
+                  
+                   <div className="contentLists">Contenty Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, sit.</div>
+               </div>
+           </div>
+   
+         </TabPanel>
+        })}
+     
     </Box>
     </>
 
