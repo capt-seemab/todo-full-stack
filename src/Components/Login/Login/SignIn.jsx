@@ -1,4 +1,3 @@
-import { body } from "express-validator";
 import "./Login.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
