@@ -121,6 +121,21 @@ function UserTodoPanel({ email, id }) {
 
           <button onClick={handleAddTodo}>Add Todo</button>
         </div>
+        <div style={{display:'flex',justifyContent:'center'}}>
+          <label class="radio-button">
+            <input  name="example-radio" type="radio"/>
+            <span class="radio"></span>
+            Send Email EveryDay
+          </label>
+          <label class="radio-button">
+            <input  name="example-radio" type="radio"/>
+            <span class="radio"></span>
+            Send Email Every Weekend
+          </label>
+        </div>
+
+
+
 
         <div className="cardDiv">
           {todos?.map((todo, index) => (
