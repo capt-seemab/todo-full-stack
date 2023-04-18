@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 function UserTodoPanel({ email, id }) {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [emailEveryDay,setEmailEveryDay]=useState(false)
   const navigate = useNavigate();
   const { state } = useLocation();
 
@@ -35,6 +36,7 @@ function UserTodoPanel({ email, id }) {
       body: JSON.stringify({
         email: state.email,
         description: inputValue,
+        emailEveryDay:emailEveryDay,
       }),
     })
       .then((response) => response.json())
@@ -123,14 +125,9 @@ function UserTodoPanel({ email, id }) {
         </div>
         <div style={{display:'flex',justifyContent:'center'}}>
           <label class="radio-button">
-            <input  name="example-radio" type="radio"/>
+            <input  name="example-radio" type="radio" onClick={(e)=>{setEmailEveryDay(true)}}/>
             <span class="radio"></span>
             Send Email EveryDay
-          </label>
-          <label class="radio-button">
-            <input  name="example-radio" type="radio"/>
-            <span class="radio"></span>
-            Send Email Every Weekend
           </label>
         </div>
 

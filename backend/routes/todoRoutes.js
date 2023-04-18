@@ -22,6 +22,8 @@ router.post(
       const task = await todoList.create({
         email: req.body.email,
         description: req.body.description,
+        emailEveryDay:req.body.emailEveryDay,
+        emailEveryWeekend:req.body.emailEveryWeekend
       });
       if (task) {
         const allTask = await todoList.find({ email: req.body.email });
@@ -41,7 +43,6 @@ router.post(
 router.post("/getUserTodo", async (req, res) => {
   try {
     const allTask = await todoList.find({ email: req.body.email });
-    console.log("allTask", allTask);
     res.json(allTask);
   } catch (error) {
     console.log(error);

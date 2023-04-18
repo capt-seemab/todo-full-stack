@@ -9,6 +9,10 @@ const todoList=new Schema({
         type:String,
         required:true,
     },
+    emailEveryDay:{
+        type:Boolean,
+        required:false,
+    },
     date:{
         type:Date,
         default:Date.now
