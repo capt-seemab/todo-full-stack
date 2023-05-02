@@ -1,0 +1,1 @@
+export const SET_AUTHTOKEN = "SET_AUTHTOKEN";

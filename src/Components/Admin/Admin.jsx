@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import "./Admin.css";
 import "../Navbar/Navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -48,6 +48,7 @@ export default function VerticalTabs() {
   const [userAllTask, setUserAllTask] = useState([]);
   const { state } = useLocation();
   const navigate = useNavigate();
+  const authToken = useSelector((state) => state.authTokenValue);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -56,6 +57,7 @@ export default function VerticalTabs() {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         email: state.email,
@@ -75,6 +77,7 @@ export default function VerticalTabs() {
       method: "get",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
     })
       .then((response) => response.json())
@@ -93,6 +96,7 @@ export default function VerticalTabs() {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         email: email,
@@ -114,6 +118,7 @@ export default function VerticalTabs() {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         id: id,

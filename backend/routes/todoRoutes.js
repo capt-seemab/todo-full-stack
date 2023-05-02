@@ -3,8 +3,7 @@ const router = express.Router();
 const todoList = require("../models/Todo");
 const { body, validationResult } = require("express-validator");
 
-
-// create toda data 
+// create toda data
 
 router.post(
   "/",
@@ -14,6 +13,15 @@ router.post(
     }),
   ],
   async (req, res) => {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.split(" ")[0] === "Bearer" &&
+      req.headers.authorization.split(" ")[1]?.length > 0
+    ) {
+      console.log("valid token");
+    } else {
+      return res.status(400).json({ errors: "Invalid auth token" });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -22,8 +30,8 @@ router.post(
       const task = await todoList.create({
         email: req.body.email,
         description: req.body.description,
-        emailEveryDay:req.body.emailEveryDay,
-        emailEveryWeekend:req.body.emailEveryWeekend
+        emailEveryDay: req.body.emailEveryDay,
+        emailEveryWeekend: req.body.emailEveryWeekend,
       });
       if (task) {
         const allTask = await todoList.find({ email: req.body.email });
@@ -38,9 +46,18 @@ router.post(
   }
 );
 
-//getall todata 
+//getall todata
 
 router.post("/getUserTodo", async (req, res) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.split(" ")[0] === "Bearer" &&
+    req.headers.authorization.split(" ")[1]?.length > 0
+  ) {
+    console.log("valid token");
+  } else {
+    return res.status(400).json({ errors: "Invalid auth token" });
+  }
   try {
     const allTask = await todoList.find({ email: req.body.email });
     res.json(allTask);
@@ -53,10 +70,18 @@ router.post("/getUserTodo", async (req, res) => {
   }
 });
 
-
 //delete the todo data
 
 router.post("/delete", async (req, res) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.split(" ")[0] === "Bearer" &&
+    req.headers.authorization.split(" ")[1]?.length > 0
+  ) {
+    console.log("valid token");
+  } else {
+    return res.status(400).json({ errors: "Invalid auth token" });
+  }
   try {
     await todoList.findByIdAndDelete(req.body.id);
 
@@ -70,7 +95,5 @@ router.post("/delete", async (req, res) => {
     });
   }
 });
-
-
 
 module.exports = router;

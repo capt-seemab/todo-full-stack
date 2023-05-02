@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react";
 import "./UserTodoPanel.css";
 import "../Navbar/Navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import { setAuthToken } from "../../redux/actions/authTokenAction";
 function UserTodoPanel({ email, id }) {
+  const dispatch=useDispatch()
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [emailEveryDay,setEmailEveryDay]=useState(false)
+  const [emailEveryDay, setEmailEveryDay] = useState(false);
   const navigate = useNavigate();
   const { state } = useLocation();
-
+  const authToken = useSelector((state) => state.authTokenValue);
 
   useEffect(() => {
     fetch("http://localhost:3001/api/todo/getUserTodo", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         email: state.email,
@@ -32,11 +36,12 @@ function UserTodoPanel({ email, id }) {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         email: state.email,
         description: inputValue,
-        emailEveryDay:emailEveryDay,
+        emailEveryDay: emailEveryDay,
       }),
     })
       .then((response) => response.json())
@@ -61,15 +66,16 @@ function UserTodoPanel({ email, id }) {
     // setTodos([...todos, inputValue]);
   };
 
-  const deleteTask=(id)=>{
+  const deleteTask = (id) => {
     fetch("http://localhost:3001/api/todo/delete", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        id:id,
-        email:state.email
+        id: id,
+        email: state.email,
       }),
     })
       .then((response) => response.json())
@@ -77,15 +83,14 @@ function UserTodoPanel({ email, id }) {
         setTodos(result);
         setInputValue("");
       });
-  }
- 
-
+  };
 
   const logOut = () => {
     fetch("http://localhost:3001/api/logout", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
         email: state.email,
@@ -94,6 +99,7 @@ function UserTodoPanel({ email, id }) {
       .then((response) => response.json())
       .then((result) => {
         if (!result.isActive) {
+          dispatch(setAuthToken(''))
           navigate("/");
         }
       });
@@ -123,16 +129,19 @@ function UserTodoPanel({ email, id }) {
 
           <button onClick={handleAddTodo}>Add Todo</button>
         </div>
-        <div style={{display:'flex',justifyContent:'center'}}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <label class="radio-button">
-            <input  name="example-radio" type="radio" onClick={(e)=>{setEmailEveryDay(true)}}/>
+            <input
+              name="example-radio"
+              type="radio"
+              onClick={(e) => {
+                setEmailEveryDay(true);
+              }}
+            />
             <span class="radio"></span>
             Send Email EveryDay
           </label>
         </div>
-
-
-
 
         <div className="cardDiv">
           {todos?.map((todo, index) => (
@@ -142,9 +151,13 @@ function UserTodoPanel({ email, id }) {
               className="cardTodos"
             >
               {todo.description}
-              <button style={{marginLeft:"15em"}} onClick={()=>deleteTask(todo._id)}>Delete</button>
-            </p> 
-        
+              <button
+                style={{ marginLeft: "15em" }}
+                onClick={() => deleteTask(todo._id)}
+              >
+                Delete
+              </button>
+            </p>
           ))}
         </div>
       </div>

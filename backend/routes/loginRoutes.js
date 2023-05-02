@@ -36,11 +36,18 @@ router.post(
       }
       user.isActive = true;
       await user.save();
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
       return res.json({
         email: user.email,
         id: user.id,
         isActive: user.isActive,
-        isAdmin:user.isAdmin
+        isAdmin: user.isAdmin,
+        authToken: authToken,
       });
     } catch (error) {
       console.error(error.message);
